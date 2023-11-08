@@ -2,7 +2,7 @@
 <Task version="1.4" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
     <Date>2023-03-21T13:05:49.7911233</Date>
-    <Author>LTPB\U6073121</Author>
+    <Author>${AUTHOR}</Author>
     <Description>Triggers WSL script on successful Cisco Anyconnect disconnection</Description>
     <URI>\OnVpnDisconnect</URI>
   </RegistrationInfo>

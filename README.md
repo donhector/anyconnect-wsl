@@ -24,7 +24,7 @@ Create Windows Scheduler tasks that react to Cisco Anyconnect VPN connect/discon
 
 ## Howto
 
-1) On your WSL, copy `set-dns.sh` to your home (ie: /home/jdoe/set-dns.sh) and make sure it has executable permissions.
+1) On your WSL, copy `set-dns.sh` to your home (ie: `/home/<user>/set-dns.sh`) and make sure it has executable permissions.
 2) On your Windows host, open Powershell as Administrator and run `setup.ps1`
 
 Now whenever the VPN is connected, the `OnVPNConnect` scheduled task will run and will:

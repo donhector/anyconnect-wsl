@@ -32,13 +32,22 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     exit 1
 }
 
-Write-Host -ForegroundColor Cyan "Configuring scheduled tasks..."
+$ErrorActionPreference="Stop"
+
+Write-Host -ForegroundColor Cyan "Configuring scheduled tasks:"
+
+# Interpolate the author field with the current Windows username so the tasks run under the right principal
+Write-Host -ForegroundColor Cyan "- Interpolating author..."
+$author="$(whoami)"
+Get-ChildItem tasks | ForEach-Object { (Get-Content $_.FullName).Replace('${AUTHOR}', $author) | Set-Content $_.FullName }
 
 # Recreate scheduled tasks to trigger scripts on VPN events
+Write-Host -ForegroundColor Cyan "- Unregistering pre-existing tasks..."
 Get-ScheduledTask | Where-Object {$_.TaskName -like "OnVpnConnect"} | Unregister-ScheduledTask -Confirm:$false
 Get-ScheduledTask | Where-Object {$_.TaskName -like "OnVpnDisconnect"} | Unregister-ScheduledTask -Confirm:$false
 # Get-ScheduledTask | Where-Object {$_.TaskName -like "BackupWSL"} | Unregister-ScheduledTask -Confirm:$false
 
+Write-Host -ForegroundColor Cyan "- Registering pre-existing tasks..."
 Register-ScheduledTask -XML $(Get-Content .\tasks\OnVpnConnect.xml -raw) -TaskName OnVpnConnect
 Register-ScheduledTask -XML $(Get-Content .\tasks\OnVpnDisconnect.xml -raw) -TaskName OnVpnDisconnect
 # Register-ScheduledTask -XML $(Get-Content .\tasks\backupWSL.xml -raw) -TaskName BackupWSL
